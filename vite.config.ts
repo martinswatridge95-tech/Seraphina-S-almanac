@@ -10,7 +10,6 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: 'autoUpdate',
-      // These are the files Vite should "watch" in your public folder
       includeAssets: ['icon-192.png', 'icon-512.png', 'favicon.ico'],
       manifest: {
         name: "Seraphina's Mystical Wellness Almanac",
