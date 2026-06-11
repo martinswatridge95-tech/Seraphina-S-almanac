@@ -4,8 +4,7 @@ import { VitePWA } from 'vite-plugin-pwa';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  // This ensures your site works on GitHub Pages
-  base: '/Seraphina-S-almanac/', 
+  base: '/Seraphina-S-almanac/',
   plugins: [
     react(),
     VitePWA({
@@ -19,6 +18,7 @@ export default defineConfig({
         background_color: '#0d1117',
         display: 'standalone',
         orientation: 'portrait',
+        scope: '/Seraphina-S-almanac/',
         id: '/Seraphina-S-almanac/',
         start_url: '/Seraphina-S-almanac/',
         categories: ['lifestyle', 'health'],
@@ -40,6 +40,25 @@ export default defineConfig({
             purpose: 'maskable'
           }
         ]
+      },
+      workbox: {
+        globPatterns: ['**/*.{js,css,html}'],
+        runtimeCaching: [
+          {
+            urlPattern: /\.(?:png|jpg|jpeg|svg|gif|webp)$/,
+            handler: 'CacheFirst',
+            options: {
+              cacheName: 'images-cache',
+              expiration: {
+                maxEntries: 100,
+                maxAgeSeconds: 60 * 60 * 24 * 30
+              }
+            }
+          }
+        ]
+      },
+      devOptions: {
+        enabled: false
       }
     })
   ]
