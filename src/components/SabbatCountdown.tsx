@@ -9,19 +9,20 @@ export default function SabbatCountdown() {
   useEffect(() => {
     async function loadNextSabbat() {
       const today = new Date();
-      const currentYear = today.getFullYear();
+      today.setHours(0, 0, 0, 0);
+      const todayStr = today.toISOString().split('T')[0];
 
       const { data } = await supabase
         .from('sabbats')
         .select('*')
-        .gte('date', today.toISOString().split('T')[0])
+        .gte('date', todayStr)
         .order('date', { ascending: true })
         .limit(1)
         .maybeSingle();
 
       if (data) {
         setNextSabbat(data);
-        const sabbatDate = new Date(data.date);
+        const sabbatDate = new Date(data.date + 'T00:00:00');
         const diffTime = sabbatDate.getTime() - today.getTime();
         const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
         setDaysUntil(diffDays);

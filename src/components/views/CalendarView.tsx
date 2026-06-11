@@ -14,6 +14,7 @@ export default function CalendarView() {
   useEffect(() => {
     async function loadSabbats() {
       const today = new Date();
+      today.setHours(0, 0, 0, 0);
       const { data } = await supabase
         .from('sabbats')
         .select('*')
@@ -21,7 +22,10 @@ export default function CalendarView() {
 
       if (data) {
         setSabbats(data);
-        const upcoming = data.find((s) => new Date(s.date) >= today);
+        const upcoming = data.find((s) => {
+          const sabbatDate = new Date(s.date + 'T00:00:00');
+          return sabbatDate >= today;
+        });
         if (upcoming) setUpcomingSabbat(upcoming);
       }
       setLoading(false);
@@ -94,7 +98,7 @@ export default function CalendarView() {
       {/* LIST */}
       <div className="space-y-4 px-1">
         {sabbats.map((sabbat) => {
-          const date = new Date(sabbat.date);
+          const date = new Date(sabbat.date + 'T00:00:00');
           const today = new Date();
           today.setHours(0, 0, 0, 0);
           const isPast = date < today;
